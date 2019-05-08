@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>详情</title>
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <style>
+        .topicDetails{
+            overflow-x: hidden;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .title2{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-group">
+        <div class="page" id="details">
+            <header class="bar bar-nav">
+                <a class="button button-link button-nav pull-left back">
+                    <span class="icon icon-left"></span>
+                    返回
+                </a>
+                <h1 class="title">详情</h1>
+            </header>
+            <div class="content topicDetails">
+                <h3 class="title2" v-text="title"></h3>
+                <div v-html="topicDetails"></div>
+            </div>
+        </div>
+    </div>
+    <script src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js'></script>
+    <script src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js'></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js.js"></script>
+    <script>
+
+        $.init();   
+    </script>
+</body>
+</html>

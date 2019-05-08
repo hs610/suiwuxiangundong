@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>首页</title>
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <style>
+      .topicDetails{
+            overflow-x: hidden;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .title2{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-group">
+        <div id="Drop-down-refresh" class="page">
+            <header class="bar bar-nav">
+                    <a class="icon icon-me pull-left open-panel"></a>
+                    <h1 class="title">首页</h1>
+            </header>
+            <!-- content应该拥有"pull-to-refresh-content"类,表示启用下拉刷新 -->
+            <div class="content pull-to-refresh-content infinite-scroll infinite-scroll-bottom"  data-distance="5" data-ptr-distance="55">
+                <!-- 默认的下拉刷新层 -->
+                <div class="pull-to-refresh-layer">
+                    <div class="preloader"></div>
+                    <div class="pull-to-refresh-arrow"></div>
+                </div>
+                <!-- 下面是正文 -->
+                <div class="card-container">
+                        <div class="card" v-for="list in lists">
+                            <a :href="getTopicsDetails(list.id)" class="external2">
+                                <div class="card-header"  v-text="list.title"></div>
+                                <div class="card-content">
+                                    <div class="card-content-inner" v-text="list.id"></div>
+                                </div>
+                            </a>
+                        </div>      
+                </div>
+                 <!-- 加载提示符 -->
+                <div class="infinite-scroll-preloader">
+                    <div class="preloader"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js'></script>
+    <script src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js'></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js.js"></script>
+    <script>
+        const app = new Vue({
+            el:"#Drop-down-refresh",
+            data:{
+                url:'https://cnodejs.org/api/v1',
+                lists:[],
+                itemsPerLoad:10, //每次加载条数
+                pageIndex:1 , //请求页数
+            },
+            mounted() {
+                this.getTopics();
+            },
+            methods: {
+                // 获取主题列表
+                getTopics(){
+                    let _this = this;
+                    if(_this.lists.length <= 0 ) $.showPreloader(); // 显示加载指示器
+                    axios.get(_this.url + '/topics', {
+                        params: {
+                            page:_this.pageIndex,         // 请求页码
+                            tab:'good',      //主题分类。目前有 ask share job good
+                            limit:_this.itemsPerLoad,       //每页条数
+                        }
+                    })
+                    .then(function (response) {
+                        $.hidePreloader();
+                        console.log(response);
+                        // _this.lists = response.data.data;
+                        response.data.data.forEach(list => {
+                            _this.lists.push(list)
+                        });
+                        console.log(_this.lists);
+                        
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                // 获取详情跳转传参
+                getTopicsDetails:function(topicsId){
+                    return 'details.html?id='+topicsId
+                }
+                
+            }, 
+        })
+        $.init();   
+    </script>
+
+</body>
+</html>
